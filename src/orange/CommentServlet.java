@@ -60,6 +60,15 @@ public class CommentServlet extends HttpServlet {
 			if(request.getParameter("comfirm") != null)
 			insertProcess(request, response);
 			
+			if(request.getParameter("select") != null)
+			selectProcess(request, response);
+			
+			if(request.getParameter("update") != null)
+				updateProcess(request, response);
+			
+			if(request.getParameter("delete") != null)
+				deleteProcess(request, response);
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,4 +114,64 @@ public class CommentServlet extends HttpServlet {
 			System.out.println(conn);
 	}
 
+	private void selectProcess (HttpServletRequest request,
+            HttpServletResponse response) throws SQLException, IOException, ServletException {
+		
+		
+		String name = request.getParameter("param");
+		System.out.println("test"+name);
+		
+		CommentDAO commentDAO = new CommentDAO(conn);
+		CommentBean commentBean = commentDAO.selectComment(name);
+		
+		System.out.println("success");
+			System.out.println("test2"+commentBean.getName());
+			
+			request.getSession(true).setAttribute("commentBean",commentBean);
+			ServletContext servletContext = getServletContext();
+		      RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/DisPlayComment.jsp");
+		      requestDispatcher.forward(request, response);
+	}
+	private void updateProcess (HttpServletRequest request,
+            HttpServletResponse response) throws SQLException, IOException, ServletException {
+			
+response.setContentType("text/html; charset=UTF-8");
+		
+		String name = request.getParameter("name");
+		Integer stars = Integer.parseInt(request.getParameter("stars"));//這個就叫轉型
+		Date utilDate = new Date();
+		Date date = utilDate;
+		String comment = request.getParameter("comment");
+		String photo = request.getParameter("photo");
+		
+		CommentBean commentBean = new CommentBean(name,stars,date,comment,photo);
+		CommentDAO commentDAO = new CommentDAO(conn);
+		if(commentDAO.updateComment(commentBean))
+			System.out.println("success");
+		
+		
+		ServletContext servletContext = getServletContext();
+	      RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/Thanks.jsp");
+	      requestDispatcher.forward(request, response);
+		
+		
+	}
+	private void deleteProcess (HttpServletRequest request,
+            HttpServletResponse response) throws SQLException, IOException, ServletException {
+			
+		
+		String name = request.getParameter("name");
+		
+		CommentDAO commentDAO = new CommentDAO(conn);
+		if(commentDAO.deleteComment(name))
+			System.out.println("success");
+		
+		ServletContext servletContext = getServletContext();
+	      RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/Thanks.jsp");
+	      requestDispatcher.forward(request, response);
+	      
+	      
+	  
+		
+	}
 }
