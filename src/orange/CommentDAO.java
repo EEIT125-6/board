@@ -48,8 +48,10 @@ public class CommentDAO {
 			pstmt.setString(5, commentBean.getName());
 			pstmt.setInt(1, commentBean.getStars());
 //			java.util.Date date = new Date(); 
-			java.sql.Date sqlDate = new java.sql.Date(commentBean.getDate().getTime());
-			pstmt.setDate(4, sqlDate);
+			
+			java.sql.Timestamp sqlDate = new java.sql.Timestamp(commentBean.getDate().getTime());
+//			pstmt.setTimestamp(4, new java.sql.Timestamp(new java.util.Date().getTime())); 
+			pstmt.setTimestamp(4, sqlDate);
 			pstmt.setString(2, commentBean.getContext());
 			pstmt.setString(3, commentBean.getPhoto());
 			int update = pstmt.executeUpdate();
@@ -97,8 +99,8 @@ public class CommentDAO {
 			pstmt.setString(1, comment.getName());
 			pstmt.setInt(2, comment.getStars());
 //			java.util.Date date = new Date(); 
-			java.sql.Date sqlDate = new java.sql.Date(comment.getDate().getTime());
-			pstmt.setDate(3, sqlDate);
+			java.sql.Timestamp sqlDate = new java.sql.Timestamp(comment.getDate().getTime());
+			pstmt.setTimestamp(3, sqlDate);
 			pstmt.setString(4, comment.getContext());
 			pstmt.setString(5, comment.getPhoto());
 			int update = pstmt.executeUpdate();

@@ -47,21 +47,22 @@ public class CommentServlet extends HttpServlet {
 	      
 	      try {
 	    	  
-	    	  ctxt = new InitialContext();
+	    	  ctxt = new InitialContext();  //載入context.xml系統預設
 	    	  ds = ( DataSource ) ctxt.lookup("java:comp/env/jdbc/EmployeeDB");
 			conn = ds.getConnection();
+			
 			CommentDAO commentDAO = new CommentDAO(conn);		
 					
 			
-			if(request.getParameter("submit") != null) {
-			System.out.println("submit");
-				packProcess(request, response);}
+			if(request.getParameter("submit") != null) { //導向不同頁面
+			System.out.println("submit");				//"xxxx"按鈕
+				packProcess(request, response);}        //判斷使用的方法
 			
 			if(request.getParameter("comfirm") != null)
 			insertProcess(request, response);
 			
 			if(request.getParameter("select") != null)
-			selectProcess(request, response);
+				selectProcess(request, response);
 			
 			if(request.getParameter("update") != null)
 				updateProcess(request, response);
@@ -83,16 +84,18 @@ public class CommentServlet extends HttpServlet {
 	private void packProcess (HttpServletRequest request,
             HttpServletResponse response) throws SQLException, IOException, ServletException {
 		response.setContentType("text/html; charset=UTF-8");
-		
 		String name = request.getParameter("name");
 		Integer stars = Integer.parseInt(request.getParameter("stars"));//這個就叫轉型
+		
 		Date utilDate = new Date();
 		Date date = utilDate;
+		System.out.println(date);
 		String comment = request.getParameter("comment");
 		String photo = request.getParameter("photo");
-	
+		
 		CommentBean commentBean = new CommentBean(name,stars,date,comment,photo);
 		request.getSession(true).setAttribute("commentBean", commentBean);
+		
 		
 		ServletContext servletContext = getServletContext();
 	      RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/DisplayInsert.jsp");
@@ -103,7 +106,7 @@ public class CommentServlet extends HttpServlet {
 	
 	
 	private void insertProcess (HttpServletRequest request,
-            HttpServletResponse response) throws SQLException, IOException {
+            HttpServletResponse response) throws SQLException, IOException, ServletException {
 		
 		
 		
@@ -111,11 +114,16 @@ public class CommentServlet extends HttpServlet {
 		CommentDAO commentDAO = new CommentDAO(conn);
 		if(commentDAO.insertComment(commentBean))
 		System.out.println("success");
-			System.out.println(conn);
-	}
-
-	private void selectProcess (HttpServletRequest request,
-            HttpServletResponse response) throws SQLException, IOException, ServletException {
+		 else
+			 System.out.println("fail"); 
+	
+		ServletContext servletContext = getServletContext();
+	    RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/Thanks.jsp");
+	    requestDispatcher.forward(request, response);
+		}
+	
+	private void selectProcess (HttpServletRequest request,HttpServletResponse response) 
+			throws SQLException, IOException, ServletException {
 		
 		
 		String name = request.getParameter("param");
@@ -128,9 +136,10 @@ public class CommentServlet extends HttpServlet {
 			System.out.println("test2"+commentBean.getName());
 			
 			request.getSession(true).setAttribute("commentBean",commentBean);
+			
 			ServletContext servletContext = getServletContext();
 		      RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/DisPlayComment.jsp");
-		      requestDispatcher.forward(request, response);
+		      requestDispatcher.forward(request, response);    //跳轉到其它後端 class
 	}
 	private void updateProcess (HttpServletRequest request,
             HttpServletResponse response) throws SQLException, IOException, ServletException {
