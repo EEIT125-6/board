@@ -13,11 +13,13 @@ import javax.persistence.Table;
 public class CommentBean {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer comid;   // PK 表格Id
 	private String name;
 	private Integer star;
 	private Date date;
 	private String context;
 	private String photo;
+	private Integer rstid;   // FK  餐廳Id
 	
 	
 	public CommentBean(){

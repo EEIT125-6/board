@@ -23,7 +23,7 @@ import orange.service.CommentService;
 /**
  * Servlet implementation class CommentServlet
  */
-@WebServlet("/CommentServlet")
+@WebServlet("/orange/CommentServlet")
 public class CommentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -42,9 +42,9 @@ public class CommentServlet extends HttpServlet {
 	      
 	      try {
 	    	  
-	    	  ctxt = new InitialContext();  //載入context.xml系統預設
-	    	  ds = ( DataSource ) ctxt.lookup("java:comp/env/jdbc/EmployeeDB");
-			conn = ds.getConnection();
+//	    	  ctxt = new InitialContext();  //載入context.xml系統預設
+//	    	  ds = ( DataSource ) ctxt.lookup("java:comp/env/jdbc/EmployeeDB");
+//			conn = ds.getConnection();
 					
 			
 			if(request.getParameter("submit") != null) { //導向不同頁面
@@ -66,11 +66,7 @@ public class CommentServlet extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		} 
 		
 	}
 	
@@ -91,7 +87,7 @@ public class CommentServlet extends HttpServlet {
 		//呼叫session，把Bean放到session
 		
 		ServletContext servletContext = getServletContext();  //把context組態資訊帶進來。
-	      RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/DisplayInsert.jsp");
+	      RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/orange/DisplayInsert.jsp");
 	      requestDispatcher.forward(request, response);  //forward            //導向此JSP檔
 	      
 		System.out.println(request.getSession(true).getAttribute("commentBean"));
@@ -112,7 +108,7 @@ public class CommentServlet extends HttpServlet {
 			 System.out.println("fail"); 
 	
 		ServletContext servletContext = getServletContext();
-	    RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/Thanks.jsp");
+	    RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/orange/Thanks.jsp");
 	    requestDispatcher.forward(request, response);
 		}
 	
@@ -154,7 +150,7 @@ response.setContentType("text/html; charset=UTF-8");
 		
 		
 		ServletContext servletContext = getServletContext();
-	      RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/Thanks.jsp");
+	      RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/orange/Thanks.jsp");
 	      requestDispatcher.forward(request, response);
 		
 		
@@ -170,7 +166,7 @@ response.setContentType("text/html; charset=UTF-8");
 			System.out.println("success");
 		
 		ServletContext servletContext = getServletContext();
-	      RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/Thanks.jsp");
+	      RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/orange/Thanks.jsp");
 	      requestDispatcher.forward(request, response);
 	      
 	      
